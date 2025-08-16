@@ -1,0 +1,107 @@
+{
+  "id": null,
+  "title": "Мониторинг FastAPI",
+  "timezone": "browser",
+  "schemaVersion": 36,
+  "version": 3,
+  "refresh": "10s",
+  "tags": ["fastapi", "русский"],
+  "panels": [
+    {
+      "type": "timeseries",
+      "title": "Среднее время ответа (мс)",
+      "gridPos": { "x": 0, "y": 0, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "rate(http_request_duration_seconds_sum[1m]) / rate(http_request_duration_seconds_count[1m]) * 1000",
+          "legendFormat": "{{endpoint}}",
+          "refId": "A"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ms",
+          "min": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Ошибки в минуту",
+      "gridPos": { "x": 12, "y": 0, "w": 12, "h": 6 },
+      "targets": [
+        {
+          "expr": "rate(http_errors_total[1m])",
+          "legendFormat": "{{method}} {{endpoint}}",
+          "refId": "B"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        }
+      }
+    },
+    {
+      "type": "stat",
+      "title": "Всего API-запросов (за 5 мин)",
+      "gridPos": { "x": 0, "y": 6, "w": 6, "h": 4 },
+      "targets": [
+        {
+          "expr": "increase(http_requests_total{endpoint!~\"/metrics|/admin.*\"}[5m])",
+          "refId": "C"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "min": 0
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Загрузка CPU (%)",
+      "gridPos": { "x": 6, "y": 6, "w": 9, "h": 4 },
+      "targets": [
+        {
+          "expr": "cpu_usage_percent",
+          "legendFormat": "CPU",
+          "refId": "D"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100
+        }
+      }
+    },
+    {
+      "type": "timeseries",
+      "title": "Использование памяти (МБ)",
+      "gridPos": { "x": 15, "y": 6, "w": 9, "h": 4 },
+      "targets": [
+        {
+          "expr": "memory_usage_bytes / 1024 / 1024",
+          "legendFormat": "Memory",
+          "refId": "E"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "megabytes",
+          "min": 0
+        }
+      }
+    }
+  ],
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  }
+}
